@@ -140,7 +140,7 @@ void moveForward()
       else if(RightDistance < LeftDistance)
       {
         moveLeft();
-        delay(100)
+        delay(100);
       }
       else if(LeftDistance < RightDistance)
       {
@@ -149,6 +149,6 @@ void moveForward()
       }
     }
       
-}
+
 
 
