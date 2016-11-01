@@ -130,6 +130,24 @@ void moveForward()
       RightDistance = distance;
       Serial.println("Right Distance = ");
       Serial.print("distance");
+      if(abs(RightDistance - LeftDistance) < 5)
+      {
+        moveBackward();
+        delay(200);
+        moveRight();
+        delay(100);
+      }
+      else if(RightDistance < LeftDistance)
+      {
+        moveLeft();
+        delay(100)
+      }
+      else if(LeftDistance < RightDistance)
+      {
+        moveRight();
+        delay(100);
+      }
+    }
       
 }
 
