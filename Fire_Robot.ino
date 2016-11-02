@@ -20,8 +20,8 @@ unsigned int LeftDistance;
 unsigned int RightDistance;
 unsigned int Time;
 unsigned int CollisionCounter;
-const int analogPin = A0; //Flame sensor connected to Arduino A0 change depending on your connection
-const int threshold = 400; // test this value you may need to modify it
+const int flamesensor = A0; //Flame sensor connected to Arduino A0 change depending on your connection
+const int threshold = 400; // test this value you may need to modify it to increase or decrease the distance
 
 void setup() 
 {
@@ -32,6 +32,7 @@ pinMode(LeftMotorBackward, OUTPUT);
 pinMode(RightMotorForward, OUTPUT);
 pinMode(RightMotorBackward, OUTPUT);
 pinMode(FAN, OUTPUT);
+PinMode(flamesensor, INPUT);
 servo.attach(6);
 
 }
@@ -39,33 +40,19 @@ servo.attach(6);
 void loop() 
 {
 
-// read the value of the Flame Sensor:
-  int analogValue = analogRead(analogPin);
-   Serial.println(analogValue); //serial print the FLAME sensor value
-  
-  if (analogValue > threshold) {
-    digitalWrite(BuzzerPin, HIGH);
-    Serial.print("High FLAME");
-    moveStop();
-  } 
-  else if (analogValue = threshold){
-    Serial.print("Low FLAME");
-    digitalWrite(FAN, HIGH);
-    delay(400);
-    digitalWrite(FAN, LOW);
-    //move to direction of scan giving the higher threshold if its left move left if its right move right
-  }
-  else {
-    digitalWrite(FAN, LOW);
-    Serial.print("No flame");
-    moveForward();
-  }
-
-  delay(1);         
-  
-  
-  
 servo.write(90);
+int sensor = analogRead(flamesensor);  // read flame sensor value
+Serial.println(sensor); //serial print the flame sensor value
+
+if (sensor > threshold)
+{
+Serial.print(" Flame Flame "); 
+digitalWrite(FAN, HIGH);
+delay(1000);
+digitalWrite(FAN, LOW);
+}
+else
+}
 scan();
 FrontDistance = distance;
 Serial.println("Front Distance = ");
@@ -81,7 +68,7 @@ else
     navigate();
   }
 }
-
+}
 void moveForward()
   {
     Serial.println("");
@@ -179,6 +166,5 @@ void moveForward()
       }
     }
       
-
 
 
