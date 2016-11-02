@@ -5,13 +5,13 @@
 #define LeftMotorBackward 3
 #define RightMotorForward 5
 #define RightMotorBackward 4
-#define USTrigger 8
-#define USEcho 9
-#define MaxDistance 100
+#define TrigPin 8
+#define EchoPin 9
+#define MaxDistance 200
 #define FAN 10
 
 Servo servo;
-NewPing sonar(USTrigger, USEcho, MaxDistance);
+NewPing sonar(TrigPin, EchoPin, MaxDistance);
 
 unsigned int duration;
 unsigned int distance;
@@ -20,6 +20,8 @@ unsigned int LeftDistance;
 unsigned int RightDistance;
 unsigned int Time;
 unsigned int CollisionCounter;
+const int analogPin = A0; //Flame sensor connected to Arduino A0 change depending on your connection
+const int threshold = 400; // test this value you may need to modify it
 
 void setup() 
 {
@@ -31,10 +33,38 @@ pinMode(RightMotorForward, OUTPUT);
 pinMode(RightMotorBackward, OUTPUT);
 pinMode(FAN, OUTPUT);
 servo.attach(6);
+
 }
 
 void loop() 
 {
+
+// read the value of the Flame Sensor:
+  int analogValue = analogRead(analogPin);
+   Serial.println(analogValue); //serial print the FLAME sensor value
+  
+  if (analogValue > threshold) {
+    digitalWrite(BuzzerPin, HIGH);
+    Serial.print("High FLAME");
+    moveStop();
+  } 
+  else if (analogValue = threshold){
+    Serial.print("Low FLAME");
+    digitalWrite(FAN, HIGH);
+    delay(400);
+    digitalWrite(FAN, LOW);
+    //move to direction of scan giving the higher threshold if its left move left if its right move right
+  }
+  else {
+    digitalWrite(FAN, LOW);
+    Serial.print("No flame");
+    moveForward();
+  }
+
+  delay(1);         
+  
+  
+  
 servo.write(90);
 scan();
 FrontDistance = distance;
